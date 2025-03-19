@@ -86,8 +86,8 @@ async def get_weather(
         return {"status": "error", "message": str(e)}
 
 # 定義新聞API路由
-@app.get("/search", response_class=JSONResponse, tags=["網路即時搜索"])
-async def get_news(
+@app.get("/search", response_class=JSONResponse, tags=["新聞查詢"])
+async def get_search(
     query: str = Query(..., description="搜索關鍵字"),
     num_results: int = Query(5, description="返回結果數量", ge=1, le=5),
     category: str = Query(
@@ -97,7 +97,7 @@ async def get_news(
     search_type: str = Query("keyword", description="搜索類型")
 ):
     """
-    網路即時搜索
+    查詢新聞
     
     參數:
     - query: 搜索關鍵字
@@ -108,22 +108,34 @@ async def get_news(
         * academic: 學術搜索
     - search_type: 搜索類型，預設為"keyword"
     """
-    # 驗證搜索類別
-    valid_categories = ["web", "news", "academic"]
-    if category not in valid_categories:
-        return {
-            "status": "error", 
-            "message": f"不支援的搜索類別。支援的類別為：{', '.join(valid_categories)}"
-        }
-        
     try:
-        search_query = f"搜索{category}類別的{query}相關資訊，返回{num_results}條"
+        # 驗證搜索類別
+        valid_categories = ["web", "news", "academic"]
+        if category not in valid_categories:
+            return {
+                "status": "error", 
+                "message": f"不支援的搜索類別。支援的類別為：{', '.join(valid_categories)}"
+            }
+        
+        # 構建搜索指令
+        search_query = f"請使用以下參數執行搜索：\n關鍵字：{query}\n類別：{category}\n數量：{num_results}\n類型：{search_type}"
+        
+        # 調用搜索函數
         result = await news_team.run(task=search_query)
+        
+        # 檢查結果是否包含錯誤信息
+        if isinstance(result, str) and (result.startswith("錯誤：") or result.startswith("發生錯誤：")):
+            return {
+                "status": "error",
+                "message": result
+            }
+            
         return {
             "status": "success", 
             "query": query,
             "category": category,
             "search_type": search_type,
+            "num_results": num_results,
             "result": result
         }
     except Exception as e:
