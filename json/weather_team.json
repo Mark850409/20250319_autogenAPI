@@ -3,8 +3,8 @@
   "component_type": "team",
   "version": 1,
   "component_version": 1,
-  "description": "RAG知識庫",
-  "label": "天氣群組_17423",
+  "description": "天氣群組",
+  "label": "天氣群組_17424",
   "config": {
     "participants": [
       {
@@ -15,7 +15,7 @@
         "description": "一個能夠為大家工作的工具人代理。",
         "label": "工具人專家",
         "config": {
-          "name": "assistant_agent_1",
+          "name": "assistant_agent",
           "model_client": {
             "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
             "component_type": "model",
