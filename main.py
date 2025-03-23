@@ -43,10 +43,15 @@ class KnowledgeRequest(BaseModel):
 class ImageGenRequest(BaseModel):
     prompt: str
 
+# 定義n8n知識庫請求模型
+class N8nKnowledgeRequest(BaseModel):
+    query: str
+    detail: Optional[bool] = False
+
 # 載入不同功能的團隊配置
 @app.on_event("startup")
 async def startup_event():
-    global weather_team, news_team, knowledge_team, image_team
+    global weather_team, news_team, knowledge_team, image_team, n8n_team
     
     # 載入各個功能的團隊配置
     with open("json/weather_team.json", "r", encoding="utf-8") as f:
@@ -57,11 +62,14 @@ async def startup_event():
         knowledge_config = json.load(f)
     with open("json/image_team.json", "r", encoding="utf-8") as f:
         image_config = json.load(f)
+    with open("json/n8n_team.json", "r", encoding="utf-8") as f:
+        n8n_config = json.load(f)
     
     weather_team = BaseGroupChat.load_component(weather_config)
     news_team = BaseGroupChat.load_component(news_config)
     knowledge_team = BaseGroupChat.load_component(knowledge_config)
     image_team = BaseGroupChat.load_component(image_config)
+    n8n_team = BaseGroupChat.load_component(n8n_config)
 
 # 定義天氣API路由
 @app.get("/weather", response_class=JSONResponse, tags=["天氣查詢"])
@@ -175,6 +183,28 @@ async def generate_image(
         query = f"生成圖片：{prompt}"
         result = await image_team.run(task=query)
         return {"status": "success", "prompt": prompt, "result": result}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+# 定義n8n知識庫查詢API路由
+@app.get("/n8n", response_class=JSONResponse, tags=["n8n知識庫"])
+async def get_n8n_knowledge(
+    query: str = Query(..., description="要查詢的n8n相關問題"),
+    detail: bool = Query(False, description="是否返回詳細解答")
+):
+    """
+    查詢n8n知識庫
+    
+    參數:
+    - query: 要查詢的n8n相關問題
+    - detail: 是否返回詳細解答
+    """
+    try:
+        search_query = f"n8n問題：{query}"
+        if detail:
+            search_query += "（請提供詳細資訊）"
+        result = await n8n_team.run(task=query)
+        return {"status": "success", "query": query, "result": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
