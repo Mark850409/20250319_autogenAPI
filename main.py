@@ -130,6 +130,7 @@ async def get_search(
         
         # 調用搜索函數
         result = await news_team.run(task=search_query)
+        print(result)
         
         # 檢查結果是否包含錯誤信息
         if isinstance(result, str) and (result.startswith("錯誤：") or result.startswith("發生錯誤：")):

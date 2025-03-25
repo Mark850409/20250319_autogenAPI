@@ -3,8 +3,8 @@
   "component_type": "team",
   "version": 1,
   "component_version": 1,
-  "description": "LangFlow知識庫群組",
-  "label": "LangFlow知識庫群組_17424",
+  "description": "RAG",
+  "label": "RAG_17427",
   "config": {
     "participants": [
       {
@@ -15,7 +15,7 @@
         "description": "一個能夠為大家工作的工具人代理。",
         "label": "工具人專家",
         "config": {
-          "name": "assistant_agent_1",
+          "name": "assistant_agent",
           "model_client": {
             "provider": "autogen_ext.models.openai.OpenAIChatCompletionClient",
             "component_type": "model",
@@ -76,7 +76,7 @@
             "config": {}
           },
           "description": "An agent that provides assistance with ability to use tools.",
-          "system_message": "你是一個樂於助人的助手。謹慎地解決任務。 \n1. 當使用者有生成圖片的需求，請將使用者的提示詞先進行中翻英再調用GENERATE_IMAGE_TOOL生圖工具。\n2. 當使用者有查詢天氣的需求，請將使用者的輸入城市名稱先進行中翻英再調用WEATHER_SEARCH_TOOL天氣查詢工具。\n3. 當使用者查詢一般資訊時，請優先調用LangFlow工具查找知識庫，若在知識庫裡面找不到才調用exa工具。\n完成後，請說 TERMINATE.",
+          "system_message": "你是一個樂於助人的助手。謹慎地解決任務。 \n1. 當使用者有生成圖片的需求，請將使用者的提示詞先進行中翻英再調用GENERATE_IMAGE_TOOL生圖工具。\n2. 當使用者有查詢天氣的需求，請將使用者的輸入城市名稱先進行中翻英再調用WEATHER_SEARCH_TOOL天氣查詢工具。\n3. 當使用者有查詢知識庫的需求，請調用LangFlow_RAG知識庫工具\n完成後，請說 TERMINATE.",
           "model_client_stream": false,
           "reflect_on_tool_use": false,
           "tool_call_summary_format": "{result}"
