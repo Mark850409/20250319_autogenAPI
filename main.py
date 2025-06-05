@@ -54,20 +54,20 @@ async def startup_event():
     global weather_team, news_team, knowledge_team, image_team, n8n_team
     
     # 載入各個功能的團隊配置
-    # with open("json/weather_team.json", "r", encoding="utf-8") as f:
-    #     weather_config = json.load(f)
-    # with open("json/news_team.json", "r", encoding="utf-8") as f:
-    #     news_config = json.load(f)
-    # with open("json/knowledge_team.json", "r", encoding="utf-8") as f:
-    #     knowledge_config = json.load(f)
+    with open("json/weather_team.json", "r", encoding="utf-8") as f:
+        weather_config = json.load(f)
+    with open("json/news_team.json", "r", encoding="utf-8") as f:
+        news_config = json.load(f)
+    with open("json/knowledge_team.json", "r", encoding="utf-8") as f:
+        knowledge_config = json.load(f)
     with open("json/image_team.json", "r", encoding="utf-8") as f:
         image_config = json.load(f)
     with open("json/n8n_team.json", "r", encoding="utf-8") as f:
         n8n_config = json.load(f)
     
-    # weather_team = BaseGroupChat.load_component(weather_config)
-    # news_team = BaseGroupChat.load_component(news_config)
-    # knowledge_team = BaseGroupChat.load_component(knowledge_config)
+    weather_team = BaseGroupChat.load_component(weather_config)
+    news_team = BaseGroupChat.load_component(news_config)
+    knowledge_team = BaseGroupChat.load_component(knowledge_config)
     image_team = BaseGroupChat.load_component(image_config)
     n8n_team = BaseGroupChat.load_component(n8n_config)
 
